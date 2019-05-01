@@ -6,6 +6,9 @@ else
 	GMOCK_DIR = /usr/local/gmock
 endif
 
+#curl support
+#LDFLAGS=-L/usr/local/opt/curl/lib
+#CPPFLAGS=-I/usr/local/opt/curl/include
 CC=g++
 DEBUG = -ggdb 
 CFLAGS_STANDARD = -std=gnu++11
