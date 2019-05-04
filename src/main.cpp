@@ -1,10 +1,15 @@
 #include <iostream>
-#include "testing.hpp"
+#include "tcxobject.hpp"
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
-    TestingClass tclass;
-    tclass.makeNothing();
-    std::cout << "sceleton c++ project" << std::endl;
+     TcxObject tcx{true, "en", "2.4"};
+    // TcxObject tcx{false};
+    std::cout << tcx.print() << std::endl;
+    if (!tcx.isEmpty())
+    {
+        
+        std::cout << "Version: " << tcx.getVersion() << std::endl;
+    }
     return 0;
 }
