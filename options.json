@@ -1,0 +1,12 @@
+{
+    "encoding": "UTF-8",
+    "version": "3.9",
+    "activities": [
+        {
+            "id": 1527607906,
+            "sport": "Boxing",
+            "distance": 10001,
+            "lapsEvery": 1000
+        }
+    ]
+}
