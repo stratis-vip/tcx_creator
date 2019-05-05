@@ -35,7 +35,7 @@ all: programs tests
 #  PROGRAMS
 programs: $(BUILD_DIR)/$(PROJECT)
 
-$(BUILD_DIR)/$(PROJECT): src/main.cpp objs/pugixml.o objs/tcxobject.o #any other object files like objs/testing.o 
+$(BUILD_DIR)/$(PROJECT): src/main.cpp objs/pugixml.o objs/tcxobject.o objs/options.o #any other object files like objs/testing.o 
 	$(DIR_GUARD)
 	@echo -n compiling $@
 	@$(CC) $(CFLAGS)  $^ $(INC) -o $@ 
@@ -55,10 +55,22 @@ $(OBJS_DIR)/gmock.o:
 	@$(CC) $(CFLAGS) -isystem -pthread -I$(TEST_INC) -c $(GMOCK_DIR)/src/gmock-all.cc -o $@
 	@echo " ...finished\n"
 
-$(OBJS_DIR)/tcxobject.o: src/tcxobject.cpp include/tcxobject.hpp 
+$(OBJS_DIR)/tcxobject.o: src/tcxobject.cpp include/tcxobject.hpp objs/activity.o objs/options.o
 	$(DIR_GUARD)
 	@echo -n compiling $@ 
 	@$(CC) $(CFLAGS) -c src/tcxobject.cpp -o $@ $(INC)
+	@echo " ...finished\n"
+
+$(OBJS_DIR)/activity.o: src/activity.cpp include/activity.hpp objs/pugixml.o objs/options.o objs/options.o
+	$(DIR_GUARD)
+	@echo -n compiling $@ 
+	@$(CC) $(CFLAGS) -c src/activity.cpp -o $@ $(INC)
+	@echo " ...finished\n"
+
+$(OBJS_DIR)/options.o: src/options.cpp include/options.hpp 
+	$(DIR_GUARD)
+	@echo -n compiling $@ 
+	@$(CC) $(CFLAGS) -c src/options.cpp -o $@ $(INC)
 	@echo " ...finished\n"
 
 $(OBJS_DIR)/pugixml.o: pxml/pugixml.cpp 
@@ -67,17 +79,31 @@ $(OBJS_DIR)/pugixml.o: pxml/pugixml.cpp
 	@$(CC) $(CFLAGS) -c pxml/pugixml.cpp -o $@ $(INC)
 	@echo " ...finished\n"
 
+$(OBJS_DIR)/infostructure.o: src/infostructure.cpp include/infostructure.hpp
+	$(DIR_GUARD)
+	@echo -n compiling $@ 
+	@$(CC) $(CFLAGS) -c src/infostructure.cpp -o $@ $(INC)
+	@echo " ...finished\n"
+
 
 
 # TESTS	
 
-$(TESTS_DIR)/gen: objs/gmock.o objs/gtest.o objs/pugixml.o tests/gen.cpp
+$(TESTS_DIR)/test_tcx_object: objs/gmock.o objs/gtest.o objs/pugixml.o \
+tests/test_tcx_object.cpp objs/options.o
 	$(DIR_GUARD)
 	@echo -n compiling test $@ 
 	@$(CC) $(CFLAGS)  $^ -o $@ $(TEST_INC) $(INC) -Ipxml -Isrc
 	@echo " ...finished\n"
 
-tests: $(TESTS_DIR)/gen
+$(TESTS_DIR)/test_activity: objs/gmock.o objs/gtest.o objs/pugixml.o tests/test_activity.cpp \
+objs/activity.o objs/infostructure.o objs/options.o
+	$(DIR_GUARD)
+	@echo -n compiling test $@ 
+	@$(CC) $(CFLAGS)  $^ -o $@ $(TEST_INC) $(INC) -Ipxml -Isrc
+	@echo " ...finished\n"
+
+tests: $(TESTS_DIR)/test_activity $(TESTS_DIR)/test_tcx_object
 
 clean:
 	@rm -rf objs build
