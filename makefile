@@ -30,7 +30,7 @@ TESTS_DIR=$(BUILD_DIR)/tests
 DIR_GUARD=@mkdir -p $(@D)
 PROJECT = main
 
-all: programs tests 
+all: libs programs tests 
 
 #  PROGRAMS
 programs: $(BUILD_DIR)/$(PROJECT)
@@ -46,24 +46,16 @@ $(BUILD_DIR)/$(PROJECT): src/main.cpp ${OBJS_DIR}/pugixml.o ${OBJS_DIR}/libtcx.a
 $(OBJS_DIR)/gtest.o: 
 	$(DIR_GUARD)
 	@echo -n compiling Google Test Library $@
-<<<<<<< HEAD
 	@$(CC) $(CFLAGS) -isystem $(GTEST_DIR)/include -I$(GTEST_DIR)  -isystem $(GMOCK_DIR) \
 	-pthread -c $(GTEST_DIR)/src/gtest-all.cc -o $@  
-=======
-	@$(CC) $(CFLAGS) -I$(GTEST_DIR)/include -I$(GTEST_DIR)  -c $(GTEST_DIR)/src/gtest-all.cc -o $@ -isystem -lpthread 
->>>>>>> 3ccc952fbd75d8a2cf722a63eb01f0bfd984868c
 	@echo " ...finished\n"
 
 $(OBJS_DIR)/gmock.o: 
 	$(DIR_GUARD)
 	@echo -n compiling Google Mocking Library $@
-<<<<<<< HEAD
 	@$(CC) $(CFLAGS) -isystem ${GTEST_DIR}/include -I${GTEST_DIR} \
     -isystem ${GMOCK_DIR}/include -I${GMOCK_DIR} \
     -pthread -c ${GMOCK_DIR}/src/gmock-all.cc -o $@ 
-=======
-	@$(CC) $(CFLAGS)  -I$(TEST_INC) -c $(GMOCK_DIR)/src/gmock-all.cc -o $@ -isystem -lpthread
->>>>>>> 3ccc952fbd75d8a2cf722a63eb01f0bfd984868c
 	@echo " ...finished\n"
 
 $(OBJS_DIR)/tcxobject.o: src/tcxobject.cpp include/tcxobject.hpp ${OBJS_DIR}/activity.o ${OBJS_DIR}/options.o
@@ -96,6 +88,9 @@ $(OBJS_DIR)/infostructure.o: src/infostructure.cpp include/infostructure.hpp
 	@$(CC) $(CFLAGS) $(INC) -c src/infostructure.cpp -o $@ 
 	@echo " ...finished\n"
 
+#LIBS
+
+
 $(OBJS_DIR)/libgmock.a: ${OBJS_DIR}/gtest.o ${OBJS_DIR}/gmock.o
 	@echo -n creating static Library $@
 	@ar -rc $@ $^
@@ -106,7 +101,7 @@ $(OBJS_DIR)/libtcx.a: ${OBJS_DIR}/infostructure.o ${OBJS_DIR}/options.o $(OBJS_D
 	@ar -rc $@ $^
 	@echo " ...finished\n"
 
-
+libs:$(OBJS_DIR)/libtcx.a $(OBJS_DIR)/libgmock.a
 
 # TESTS	
 
@@ -118,7 +113,7 @@ tests/test_tcx_object.cpp ${OBJS_DIR}/libtcx.a
 	@echo " ...finished\n"
 
 $(TESTS_DIR)/test_activity: ${OBJS_DIR}/libgmock.a ${OBJS_DIR}/pugixml.o tests/test_activity.cpp \
-objs/libtcx.a
+${OBJS_DIR}/libtcx.a
 	$(DIR_GUARD)
 	@echo -n compiling test $@ 
 	@$(CC) $(CFLAGS) $(INC) $(TEST_INC) $^  ${OBJS_DIR}/libgmock.a -o $@
