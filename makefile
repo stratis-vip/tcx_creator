@@ -46,16 +46,24 @@ $(BUILD_DIR)/$(PROJECT): src/main.cpp ${OBJS_DIR}/pugixml.o ${OBJS_DIR}/libtcx.a
 $(OBJS_DIR)/gtest.o: 
 	$(DIR_GUARD)
 	@echo -n compiling Google Test Library $@
+<<<<<<< HEAD
 	@$(CC) $(CFLAGS) -isystem $(GTEST_DIR)/include -I$(GTEST_DIR)  -isystem $(GMOCK_DIR) \
 	-pthread -c $(GTEST_DIR)/src/gtest-all.cc -o $@  
+=======
+	@$(CC) $(CFLAGS) -I$(GTEST_DIR)/include -I$(GTEST_DIR)  -c $(GTEST_DIR)/src/gtest-all.cc -o $@ -isystem -lpthread 
+>>>>>>> 3ccc952fbd75d8a2cf722a63eb01f0bfd984868c
 	@echo " ...finished\n"
 
 $(OBJS_DIR)/gmock.o: 
 	$(DIR_GUARD)
 	@echo -n compiling Google Mocking Library $@
+<<<<<<< HEAD
 	@$(CC) $(CFLAGS) -isystem ${GTEST_DIR}/include -I${GTEST_DIR} \
     -isystem ${GMOCK_DIR}/include -I${GMOCK_DIR} \
     -pthread -c ${GMOCK_DIR}/src/gmock-all.cc -o $@ 
+=======
+	@$(CC) $(CFLAGS)  -I$(TEST_INC) -c $(GMOCK_DIR)/src/gmock-all.cc -o $@ -isystem -lpthread
+>>>>>>> 3ccc952fbd75d8a2cf722a63eb01f0bfd984868c
 	@echo " ...finished\n"
 
 $(OBJS_DIR)/tcxobject.o: src/tcxobject.cpp include/tcxobject.hpp ${OBJS_DIR}/activity.o ${OBJS_DIR}/options.o
