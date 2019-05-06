@@ -46,13 +46,13 @@ $(BUILD_DIR)/$(PROJECT): src/main.cpp objs/pugixml.o objs/tcxobject.o objs/optio
 $(OBJS_DIR)/gtest.o: 
 	$(DIR_GUARD)
 	@echo -n compiling Google Test Library $@
-	@$(CC) $(CFLAGS) -isystem -pthread -I$(GTEST_DIR)/include -I$(GTEST_DIR)  -c $(GTEST_DIR)/src/gtest-all.cc -o $@
+	@$(CC) $(CFLAGS) -I$(GTEST_DIR)/include -I$(GTEST_DIR)  -c $(GTEST_DIR)/src/gtest-all.cc -o $@ -isystem -lpthread 
 	@echo " ...finished\n"
 
 $(OBJS_DIR)/gmock.o: 
 	$(DIR_GUARD)
 	@echo -n compiling Google Mocking Library $@
-	@$(CC) $(CFLAGS) -isystem -pthread -I$(TEST_INC) -c $(GMOCK_DIR)/src/gmock-all.cc -o $@
+	@$(CC) $(CFLAGS)  -I$(TEST_INC) -c $(GMOCK_DIR)/src/gmock-all.cc -o $@ -isystem -lpthread
 	@echo " ...finished\n"
 
 $(OBJS_DIR)/tcxobject.o: src/tcxobject.cpp include/tcxobject.hpp objs/activity.o objs/options.o
@@ -93,14 +93,14 @@ $(TESTS_DIR)/test_tcx_object: objs/gmock.o objs/gtest.o objs/pugixml.o \
 tests/test_tcx_object.cpp objs/options.o
 	$(DIR_GUARD)
 	@echo -n compiling test $@ 
-	@$(CC) $(CFLAGS)  $^ -o $@ $(TEST_INC) $(INC) -Ipxml -Isrc
+	@$(CC) $(CFLAGS) -isystem -pthread  $^ -o $@ $(TEST_INC) $(INC) -Ipxml -Isrc
 	@echo " ...finished\n"
 
-$(TESTS_DIR)/test_activity: objs/gmock.o objs/gtest.o objs/pugixml.o tests/test_activity.cpp \
+$(TESTS_DIR)/test_activity: objs/gtest.o objs/gmock.o objs/pugixml.o tests/test_activity.cpp \
 objs/activity.o objs/infostructure.o objs/options.o
 	$(DIR_GUARD)
 	@echo -n compiling test $@ 
-	@$(CC) $(CFLAGS)  $^ -o $@ $(TEST_INC) $(INC) -Ipxml -Isrc
+	@$(CC) $(CFLAGS)  -isystem -pthread  $^ -o $@ $(TEST_INC) $(INC) -Ipxml -Isrc
 	@echo " ...finished\n"
 
 tests: $(TESTS_DIR)/test_activity $(TESTS_DIR)/test_tcx_object
