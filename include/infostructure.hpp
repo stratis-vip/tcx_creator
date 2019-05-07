@@ -3,13 +3,13 @@
 
 #include <string>
 
-class Info
-{
-  public:
+class Info {
+public:
   std::string sport;
-  std::string id;
+  size_t id;
   size_t distance;
   size_t lapsEvery;
+  size_t totalTimeInSeconds;
 };
 
 #endif

@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]) {
   Info of;
-  of.id = "1";
+  of.id = 1;
   of.distance = 12345;
   of.lapsEvery = 1000;
   // TcxObject tcx{"/Users/stratis/Desktop/dev/c++/tcx_creator/options.json"};
@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Version: " << tcx.getVersion() << std::endl;
   }
+  std::cout << getCurrentDateTimeAsId(1527607906 + 3600) << std::endl;
   // std::cout << opt.getId() << std::endl;
   return 0;
 }

@@ -6,6 +6,7 @@
             "id": 1527607906,
             "sport": "Boxing",
             "distance": 10001,
+            "totalTimeInSeconds": 3600,
             "lapsEvery": 1000
         }
     ]

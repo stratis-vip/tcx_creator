@@ -1,39 +1,33 @@
 #ifndef options_hpp
 #define options_hpp
 
+#include "infostructure.hpp"
+#include "json.hpp"
 #include <ctime>
+#include <fstream>
 #include <iomanip>
 #include <sstream>
-#include <fstream>
-#include "json.hpp"
 #include <vector>
-#include "infostructure.hpp"
 
 using json = nlohmann::json;
 
 std::string getCurrentDateTimeAsId(time_t timeToConvert = 0);
 json readFromFile(const std::string fileName);
 
-
-
-
-
-class Options
-{
+class Options {
 public:
-  Options(std::string fileName)
-  {
+  Options(std::string fileName) {
     json j = readFromFile(fileName);
     //_id = getCurrentDateTimeAsId(j["id"]);
     auto ar = j["activities"];
 
-    for (auto r : ar)
-    {
+    for (auto r : ar) {
       Info f;
-      f.id = getCurrentDateTimeAsId(r["id"]);
+      f.id = r["id"];
       f.sport = r["sport"];
       f.distance = r["distance"];
       f.lapsEvery = r["lapsEvery"];
+      f.totalTimeInSeconds = r["totalTimeInSeconds"];
       activitiesInfo.push_back(f);
     }
     _encoding = j["encoding"];
@@ -54,15 +48,9 @@ public:
   //   return "Generic";
   // }
 
-  const std::string getEncoding() const
-  {
-    return _encoding;
-  }
+  const std::string getEncoding() const { return _encoding; }
 
-  const std::string getVersion() const
-  {
-    return _version;
-  }
+  const std::string getVersion() const { return _version; }
 
   // const size_t getDistance(const size_t activityIndex) const
   // {
@@ -74,10 +62,7 @@ public:
   std::vector<Info>::iterator begin() { return activitiesInfo.begin(); }
   std::vector<Info>::iterator end() { return activitiesInfo.end(); }
 
-  const size_t activitiesCount() const
-  {
-    return activitiesInfo.size();
-  }
+  const size_t activitiesCount() const { return activitiesInfo.size(); }
 
 private:
   std::string _encoding{"UTF-8"};
